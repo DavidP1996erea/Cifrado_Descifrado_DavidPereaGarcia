@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class Funcionalidades {
 
-    
+
     /**
      *
      * Genera la clave de cifrado y descifrado a partir de la contraseña del usuario.
@@ -28,28 +28,31 @@ public class Funcionalidades {
 
     }
 
+    /**
+     * Método que cifrará un mensaje introducido por el usuario. Para ello se recibe como parámetro un objeto
+     * de tipo Key con la contraseña. Una vez cifrado se escribe en un fichero.
+     * @param clave
+     */
     public static void cifrar(Key clave){
 
         Scanner sc = new Scanner(System.in);
-        // 2 - Crear un Cipher
+
         Cipher cipher = null;
         try {
             cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 
-        // 3 - Iniciar el cifrado con la clave
+        // Iniciar el cifrado con la clave
          cipher.init(Cipher.ENCRYPT_MODE, clave);
 
             System.out.println("Introduzca un mensaje");
             String mensaje = sc.nextLine();
-        // 4 - Llevar a cabo el cifrado
+        //  Llevar a cabo el cifrado
         byte[] cipherText = cipher.doFinal(mensaje.getBytes());
 
 
+        // Se escribe en el fichero
             escribirFichero(Base64.getEncoder().encodeToString(cipherText));
 
-
-
-            System.out.println();
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         } catch (NoSuchPaddingException e) {
@@ -65,6 +68,11 @@ public class Funcionalidades {
 
     }
 
+    /**
+     * Método para descifrar, como el método cifrar se recibe un objeto Key con la clave. Luego se guarda en una
+     * variable el contenido del fichero.
+     * @param clave
+     */
     public static void descifrar(Key clave){
 
         String texto = leerFichero();
@@ -73,10 +81,10 @@ public class Funcionalidades {
         try {
             cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 
-        // 3 - Iniciar el descifrado con la clave
+        // Iniciar el descifrado con la clave
         cipher.init(Cipher.DECRYPT_MODE, clave);
 
-        // 4 - Llevar a cabo el descifrado
+        // Llevar a cabo el descifrado
         byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(texto));
 
         // Imprimimos el mensaje descifrado:
@@ -98,8 +106,10 @@ public class Funcionalidades {
     }
 
 
-
-
+    /**
+     * Método para escribir en un fichero un String recibido por parámetro
+     * @param mensaje
+     */
     public static void escribirFichero(String mensaje){
         try {
             String filePath = "C:\\Users\\dperea\\Downloads\\David_Perea_Garcia_HibernateCrud\\Cifrado_Descifrado_DavidPereaGarcia\\src\\guardarCifrados";
@@ -114,9 +124,10 @@ public class Funcionalidades {
     }
 
 
-
-
-
+    /**
+     * Método que leerá un fichero y devolverá un String con el contenido de este
+     * @return
+     */
     public static String leerFichero() {
 
         BufferedReader br = null;
